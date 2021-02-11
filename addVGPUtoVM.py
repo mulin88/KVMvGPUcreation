@@ -95,6 +95,9 @@ def addOrReplaceUUID():
             with open(vm_xml_new, "wb") as xmlFile:
                 tree.write(xmlFile)
 
+            cmd_updatexml = "virsh define {}".format(vm_xml_new)
+            os.system(cmd_updatexml)
+
 if __name__ == '__main__':
     readVGPUinstancesUUID()
 
