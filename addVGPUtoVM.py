@@ -3,7 +3,8 @@ import subprocess
 import xml.etree.ElementTree as ET
 import tempfile
 import shutil
-# import libvirt
+import libvirt
+import sys
 
 sampleVMxmlFolder = '/root/changeXMLuuid'
 sampleXMlfile = 'mwp-node1.xml'
@@ -28,6 +29,24 @@ def allVMshutdown():
         return -1
     else:
         return 0
+
+def allVMshutdown_libvirt():
+    conn = libvirt.open('qemu:///system')
+    if conn == None:
+        print('Failed to open connection to qemu:///system', file=sys.stderr)
+        exit(0)
+
+    domainIDs = conn.listDomainsID()
+    if domainIDs == None:
+        print('Failed to get a list of domain IDs', file=sys.stderr)
+        exit(0)
+
+    if len(domainIDs) == 0:
+        return 0
+    else:
+        return -1
+
+
 
 def readVGPUinstancesUUID():
     cmd = "mdevctl list"
@@ -101,11 +120,7 @@ def addOrReplaceUUID():
 if __name__ == '__main__':
     readVGPUinstancesUUID()
 
-    if len(uuid_cProfile) < len(vm_cProfile) or len(uuid_qProfile) < len(vm_qProfile):
-        print("There are not enough vGPU instances for predefined VMs")
-        exit(0)
-
-    if allVMshutdown() != 0:
+    if allVMshutdown_libvirt() != 0:
         print("There are VM still running, please shutdown\n")
         exit(0)
 
