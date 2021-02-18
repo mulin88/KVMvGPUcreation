@@ -1,7 +1,7 @@
 # KVMvGPUcreation
 
 For REHL + KVM + NVIDIA vGPU configuraition
-## Creaete vGPU instances via 'mdevctl' 
+## Create vGPU instances via 'mdevctl' 
 create vGPU instance based on vGPU profle eg. C-profile or Q-profile,
 
 ## Update vGPU UUID to existing VM configuration
